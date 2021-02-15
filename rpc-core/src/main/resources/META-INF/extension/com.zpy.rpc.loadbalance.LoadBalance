@@ -1,0 +1,1 @@
+loadBalance=com.zpy.rpc.loadbalance.loadbalancer.ConsistentHashLoadBalance

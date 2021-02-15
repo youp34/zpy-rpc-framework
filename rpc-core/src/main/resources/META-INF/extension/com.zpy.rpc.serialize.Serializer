@@ -1,0 +1,2 @@
+kyro=com.zpy.rpc.serialize.kyro.KryoSerializer
+protostuff=com.zpy.rpc.serialize.protostuff.ProtostuffSerializer
