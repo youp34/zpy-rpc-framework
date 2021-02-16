@@ -13,7 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Kryo serialization class, Kryo serialization efficiency is very high, but only compatible with Java language
+ * Kryo序列化类，Kryo序列化效率很高，但只兼容Java语言
  *
  * @author zhao peng yu
  */
@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 public class KryoSerializer implements Serializer {
 
     /**
-     * Because Kryo is not thread safe. So, use ThreadLocal to store Kryo objects
+     * 因为Kryo不是线程安全的。所以，使用ThreadLocal来存储Kryo对象
      */
     private final ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
@@ -37,6 +37,7 @@ public class KryoSerializer implements Serializer {
             Kryo kryo = kryoThreadLocal.get();
             // Object->byte:将对象序列化为byte数组
             kryo.writeObject(output, obj);
+            // remove掉threadlocal避免内存泄漏
             kryoThreadLocal.remove();
             return output.toBytes();
         } catch (Exception e) {

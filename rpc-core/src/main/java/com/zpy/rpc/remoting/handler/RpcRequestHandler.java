@@ -13,8 +13,7 @@ import java.lang.reflect.Method;
 /**
  * RpcRequest processor
  *
- * @author shuang.kou
- * @createTime 2020年05月13日 09:05:00
+ * @author zhao peng yu
  */
 @Slf4j
 public class RpcRequestHandler {
@@ -25,7 +24,7 @@ public class RpcRequestHandler {
     }
 
     /**
-     * Processing rpcRequest: call the corresponding method, and then return the method
+     * 处理rpcRequest：调用相应的方法，然后返回该方法
      */
     public Object handle(RpcRequest rpcRequest) {
         Object service = serviceProvider.getService(rpcRequest.toRpcProperties());

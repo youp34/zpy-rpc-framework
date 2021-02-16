@@ -17,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 
 /**
- * custom protocol decoder
+ *
+ *
  * <pre>
  *   0     1     2     3     4        5     6     7     8         9          10      11     12  13  14   15 16
  *   +-----+-----+-----+-----+--------+----+----+----+------+-----------+-------+----- --+-----+-----+-------+
@@ -36,8 +37,7 @@ import java.util.Arrays;
  * {@link LengthFieldBasedFrameDecoder} is a length-based decoder , used to solve TCP unpacking and sticking problems.
  * </p>
  *
- * @author wangtao
- * @createTime on 2020/10/2
+ * @author zhao peng yu
  * @see <a href="https://zhuanlan.zhihu.com/p/95621344">LengthFieldBasedFrameDecoder解码器</a>
  */
 @Slf4j

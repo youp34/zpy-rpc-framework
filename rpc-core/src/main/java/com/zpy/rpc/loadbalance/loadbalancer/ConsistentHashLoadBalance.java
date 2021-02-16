@@ -18,18 +18,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class ConsistentHashLoadBalance extends AbstractLoadBalance {
+    //缓存地址对应表
     private final ConcurrentHashMap<String, ConsistentHashSelector> selectors = new ConcurrentHashMap<>();
 
     @Override
     protected String doSelect(List<String> serviceAddresses, String rpcServiceName) {
         //获取HashCode
         int identityHashCode = System.identityHashCode(serviceAddresses);
-
+        //先到map中进行查找
         ConsistentHashSelector selector = selectors.get(rpcServiceName);
 
-        // check for updates
+        // 如果没有找到数据
         if (selector == null || selector.identityHashCode != identityHashCode) {
+            //新建一个对象存储
             selectors.put(rpcServiceName, new ConsistentHashSelector(serviceAddresses, 160, identityHashCode));
+            //取出
             selector = selectors.get(rpcServiceName);
         }
 
@@ -45,6 +48,7 @@ public class ConsistentHashLoadBalance extends AbstractLoadBalance {
             this.virtualInvokers = new TreeMap<>();
             this.identityHashCode = identityHashCode;
 
+            //
             for (String invoker : invokers) {
                 for (int i = 0; i < replicaNumber / 4; i++) {
                     byte[] digest = md5(invoker + i);

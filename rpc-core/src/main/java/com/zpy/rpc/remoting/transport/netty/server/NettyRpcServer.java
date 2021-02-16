@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Server. Receive the client message, call the corresponding method according to the client message,
  * and then return the result to the client.
- *
+ *服务器。接收客户端消息，根据客户端消息调用相应的方法，然后将结果返回给客户端。
  * @author zhao peng yu
  */
 @Slf4j

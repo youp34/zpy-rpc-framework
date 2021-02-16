@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhao peng yu
+ *
+ * 服务注册 发现 类
  */
 @Slf4j
 public class ServiceProviderImpl implements ServiceProvider {
@@ -25,17 +27,28 @@ public class ServiceProviderImpl implements ServiceProvider {
      * key: rpc service name(interface name + version + group)
      * value: service object
      */
+    //存储服务名+对象
     private final Map<String, Object> serviceMap;
+    //存储服务名
     private final Set<String> registeredService;
     private final ServiceRegistry serviceRegistry;
 
 
+    /**
+     * 初始化
+     */
     public ServiceProviderImpl() {
         serviceMap = new ConcurrentHashMap<>();
         registeredService = ConcurrentHashMap.newKeySet();
         serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension("zk");
     }
 
+    /**
+     * 本地缓存表注册服务名
+     * @param service              service object
+     * @param serviceClass         the interface class implemented by the service instance object
+     * @param rpcServiceProperties service related attributes
+     */
     @Override
     public void addService(Object service, Class<?> serviceClass, RpcServiceProperties rpcServiceProperties) {
         String rpcServiceName = rpcServiceProperties.toRpcServiceName();
@@ -47,6 +60,11 @@ public class ServiceProviderImpl implements ServiceProvider {
         log.info("Add service: {} and interfaces:{}", rpcServiceName, service.getClass().getInterfaces());
     }
 
+    /**
+     * 本地缓存map获取服务
+     * @param rpcServiceProperties service related attributes
+     * @return
+     */
     @Override
     public Object getService(RpcServiceProperties rpcServiceProperties) {
         Object service = serviceMap.get(rpcServiceProperties.toRpcServiceName());
