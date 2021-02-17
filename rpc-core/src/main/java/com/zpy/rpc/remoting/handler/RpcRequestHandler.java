@@ -27,6 +27,7 @@ public class RpcRequestHandler {
      * 处理rpcRequest：调用相应的方法，然后返回该方法
      */
     public Object handle(RpcRequest rpcRequest) {
+        //到缓存表查找
         Object service = serviceProvider.getService(rpcRequest.toRpcProperties());
         return invokeTargetMethod(rpcRequest, service);
     }

@@ -55,6 +55,12 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
+    /**
+     * 心跳机制检测
+     * @param ctx
+     * @param evt
+     * @throws Exception
+     */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
@@ -75,7 +81,7 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
-     * Called when an exception occurs in processing a client message
+     * 在处理客户端消息时发生异常时调用
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {

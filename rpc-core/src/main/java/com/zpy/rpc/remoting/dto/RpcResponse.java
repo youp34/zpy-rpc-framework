@@ -6,8 +6,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * @author shuang.kou
- * @createTime 2020年05月12日 16:15:00
+ * @author zhao peng yu
  * 返回数据格式
  */
 @AllArgsConstructor

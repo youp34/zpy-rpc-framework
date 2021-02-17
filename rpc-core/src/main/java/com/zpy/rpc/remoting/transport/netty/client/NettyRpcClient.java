@@ -49,13 +49,13 @@ public final class NettyRpcClient implements RpcRequestTransport {
                 .channel(NioSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 //  The timeout period of the connection.
-                //  If this time is exceeded or the connection cannot be established, the connection fails.
+                //  如果超过此时间或无法建立连接，则连接将失败。->  将会调用userEventTriggered
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
-                        // If no data is sent to the server within 15 seconds, a heartbeat request is sent
+                        // 如果5秒内没有数据发送到服务器，则会发送心跳请求
                         p.addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
                         p.addLast(new RpcMessageEncoder());
                         p.addLast(new RpcMessageDecoder());
@@ -93,7 +93,7 @@ public final class NettyRpcClient implements RpcRequestTransport {
         CompletableFuture<RpcResponse<Object>> resultFuture = new CompletableFuture<>();
         // build rpc service name by rpcRequest
         String rpcServiceName = rpcRequest.toRpcProperties().toRpcServiceName();
-        // get server address
+        // 根据负载均衡算法查找一个服务
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcServiceName);
         // get  server address related channel
         Channel channel = getChannel(inetSocketAddress);

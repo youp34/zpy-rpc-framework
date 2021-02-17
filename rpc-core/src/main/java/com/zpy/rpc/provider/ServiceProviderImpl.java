@@ -44,7 +44,7 @@ public class ServiceProviderImpl implements ServiceProvider {
     }
 
     /**
-     * 本地缓存表注册服务名
+     * 本地缓存表注册服务
      * @param service              service object
      * @param serviceClass         the interface class implemented by the service instance object
      * @param rpcServiceProperties service related attributes

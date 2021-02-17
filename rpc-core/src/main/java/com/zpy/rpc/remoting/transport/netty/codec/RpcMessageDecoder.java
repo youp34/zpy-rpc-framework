@@ -38,7 +38,20 @@ import java.util.Arrays;
  * </p>
  *
  * @author zhao peng yu
- * @see <a href="https://zhuanlan.zhihu.com/p/95621344">LengthFieldBasedFrameDecoder解码器</a>
+ *
+ *
+ *
+ * FixedLengthFrameDecoder：定长协议解码器，我们可以指定固定的字节数算一个完整的报文
+ *
+ * LineBasedFrameDecoder：  行分隔符解码器，遇到\n或者\r\n，则认为是一个完整的报文
+ *
+ * DelimiterBasedFrameDecoder：    分隔符解码器，与LineBasedFrameDecoder类似，只不过分隔符可以自己指定
+ *
+ * LengthFieldBasedFrameDecoder：长度编码解码器，将报文划分为报文头/报文体，根据报文头中的Length字段确定报文体的长度，因此报文提的长度是可变的
+ *
+ * JsonObjectDecoder：json格式解码器，当检测到匹配数量的"{" 、”}”或”[””]”时，则认为是一个完整的json对象或者json数组。
+ *
+ * 这些实现类，都只是将接收到的二进制数据，解码成包含完整报文信息的ByteBuf实例后，就直接交给了之后的ChannelInboundHandler处理。
  */
 @Slf4j
 public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
@@ -90,8 +103,9 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
 
 
     private Object decodeFrame(ByteBuf in) {
-        // note: must read ByteBuf in order
+        // 先检查魔术
         checkMagicNumber(in);
+        // 检查版本
         checkVersion(in);
         int fullLength = in.readInt();
         // build RpcMessage object
@@ -111,20 +125,25 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
             rpcMessage.setData(RpcConstants.PONG);
             return rpcMessage;
         }
+        //-16
         int bodyLength = fullLength - RpcConstants.HEAD_LENGTH;
         if (bodyLength > 0) {
             byte[] bs = new byte[bodyLength];
             in.readBytes(bs);
             // decompress the bytes
             String compressName = CompressTypeEnum.getName(compressType);
+            //解压缩
             Compress compress = ExtensionLoader.getExtensionLoader(Compress.class)
                     .getExtension(compressName);
             bs = compress.decompress(bs);
             // deserialize the object
+            // 获取反序列化类型
             String codecName = SerializationTypeEnum.getName(rpcMessage.getCodec());
             log.info("codec name: [{}] ", codecName);
+            // 获取实例
             Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class)
                     .getExtension(codecName);
+            // 判断消息类型   决定消息体的类型
             if (messageType == RpcConstants.REQUEST_TYPE) {
                 RpcRequest tmpValue = serializer.deserialize(bs, RpcRequest.class);
                 rpcMessage.setData(tmpValue);

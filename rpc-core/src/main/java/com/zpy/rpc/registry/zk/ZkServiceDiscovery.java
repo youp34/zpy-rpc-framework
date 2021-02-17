@@ -33,7 +33,7 @@ public class ZkServiceDiscovery implements ServiceDiscovery {
         if (serviceUrlList == null || serviceUrlList.size() == 0) {
             throw new RpcException(RpcErrorMessageEnum.SERVICE_CAN_NOT_BE_FOUND, rpcServiceName);
         }
-        // 负载均衡
+        // 负载均衡寻找随机一个服务地址进行连接
         String targetServiceUrl = loadBalance.selectServiceAddress(serviceUrlList, rpcServiceName);
         log.info("Successfully found the service address:[{}]", targetServiceUrl);
         //对服务地址进行分割  host  port

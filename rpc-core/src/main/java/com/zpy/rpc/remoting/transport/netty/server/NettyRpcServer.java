@@ -47,7 +47,9 @@ public class NettyRpcServer {
     public void start() {
         CustomShutdownHook.getCustomShutdownHook().clearAll();
         String host = InetAddress.getLocalHost().getHostAddress();
+        //监听客户端链接
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        //工作
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         DefaultEventExecutorGroup serviceHandlerGroup = new DefaultEventExecutorGroup(
                 RuntimeUtil.cpus() * 2,
@@ -55,14 +57,26 @@ public class NettyRpcServer {
         );
         try {
             ServerBootstrap b = new ServerBootstrap();
+            /**
+             * childHandler()和childOption()都是给workerGroup （也就是group方法中的childGroup参数）进行设置的，
+             * option()和handler()都是给bossGroup（也就是group方法中的parentGroup参数）设置的。
+             *
+             * childHandler()配置的handler是客户端连接之后才会处理的。
+             * option和childOption也是一样的道理。
+             */
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    // TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。TCP_NODELAY 参数的作用就是控制是否启用 Nagle 算法。
+                    // TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。
+                    // TCP_NODELAY 参数的作用就是控制是否启用 Nagle 算法。
+                    // 关闭nagle算法允许数据的小包发送
+                    //    优点：网络延迟低 适合netty场景
+                    //    缺点：网络利用率较低
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     // 是否开启 TCP 底层心跳机制
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     //表示系统用于临时存放已完成三次握手的请求的队列的最大长度,如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
                     .option(ChannelOption.SO_BACKLOG, 128)
+                    // 以给定的日志级别打印出LoggingHandler中的日志。
                     .handler(new LoggingHandler(LogLevel.INFO))
                     // 当客户端第一次进行请求的时候才会进行初始化
                     .childHandler(new ChannelInitializer<SocketChannel>() {

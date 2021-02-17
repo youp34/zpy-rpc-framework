@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author zhao peng yu
  */
-public class UnprocessedRequests {
+public class    UnprocessedRequests {
     private static final Map<String, CompletableFuture<RpcResponse<Object>>> UNPROCESSED_RESPONSE_FUTURES = new ConcurrentHashMap<>();
 
     public void put(String requestId, CompletableFuture<RpcResponse<Object>> future) {
