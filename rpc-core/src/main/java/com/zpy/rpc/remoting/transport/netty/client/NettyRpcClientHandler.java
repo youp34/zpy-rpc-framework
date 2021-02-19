@@ -34,7 +34,7 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
-     * Read the message transmitted by the server
+     * 读取服务器发送的消息
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {

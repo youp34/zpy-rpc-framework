@@ -36,6 +36,7 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
 
     /**
      * bean初始化前被调用
+     * 扫描每一个bean然后进行服务注册
      * @param bean
      * @param beanName
      * @return

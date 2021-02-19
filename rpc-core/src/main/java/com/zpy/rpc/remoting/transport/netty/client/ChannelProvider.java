@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * store and get Channel object
+ * 存储服务端的传过来的 channel 对象
  *
  * @author zhao peng yu
  */

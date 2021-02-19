@@ -68,8 +68,7 @@ public final class NettyRpcClient implements RpcRequestTransport {
     }
 
     /**
-     * connect server and get the channel ,so that you can send rpc message to server
-     *
+     * 连接服务器并获取通道，以便可以向服务器发送rpc消息
      * @param inetSocketAddress server address
      * @return the channel
      */
@@ -95,10 +94,10 @@ public final class NettyRpcClient implements RpcRequestTransport {
         String rpcServiceName = rpcRequest.toRpcProperties().toRpcServiceName();
         // 根据负载均衡算法查找一个服务
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcServiceName);
-        // get  server address related channel
+        // 获取服务器地址相关通道
         Channel channel = getChannel(inetSocketAddress);
         if (channel.isActive()) {
-            // put unprocessed request
+            // 放置未处理的请求
             unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
             RpcMessage rpcMessage = new RpcMessage();
             rpcMessage.setData(rpcRequest);

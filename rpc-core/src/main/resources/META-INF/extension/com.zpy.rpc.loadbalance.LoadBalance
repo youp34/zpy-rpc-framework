@@ -1,1 +1,2 @@
 loadBalance=com.zpy.rpc.loadbalance.loadbalancer.ConsistentHashLoadBalance
+RandomLoadBalance=com.zpy.rpc.loadbalance.loadbalancer.RandomLoadBalance
