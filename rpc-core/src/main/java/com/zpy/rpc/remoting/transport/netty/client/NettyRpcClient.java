@@ -94,7 +94,7 @@ public final class NettyRpcClient implements RpcRequestTransport {
         String rpcServiceName = rpcRequest.toRpcProperties().toRpcServiceName();
         // 根据负载均衡算法查找一个服务
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcServiceName);
-        // 获取服务器地址相关通道
+        // 先从map获取服务器地址相关通道  如果没有对应通道 创建connect一个 放入map中
         Channel channel = getChannel(inetSocketAddress);
         if (channel.isActive()) {
             // 放置未处理的请求

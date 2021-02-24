@@ -3,7 +3,7 @@ package com.zpy.rpc.provider;
 import com.zpy.rpc.entity.RpcServiceProperties;
 
 /**
- * store and provide service object.
+ * 存储和提供服务对象。
  *
  * @author zhao peng yu
  */

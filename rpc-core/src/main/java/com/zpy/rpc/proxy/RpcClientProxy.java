@@ -64,8 +64,7 @@ public class RpcClientProxy implements InvocationHandler {
     }
 
     /**
-     * This method is actually called when you use a proxy object to call a method.
-     * The proxy object is the object you get through the getProxy method.
+     * 当您使用代理对象调用方法代理对象是通过getProxy方法获得的对象。
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")

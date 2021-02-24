@@ -33,7 +33,7 @@ public class RpcRequestHandler {
     }
 
     /**
-     * get method execution results
+     * 获取方法执行结果
      *
      * @param rpcRequest client request
      * @param service    service object

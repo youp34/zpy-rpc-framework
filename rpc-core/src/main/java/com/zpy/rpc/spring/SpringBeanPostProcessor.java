@@ -73,6 +73,7 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
         for (Field declaredField : declaredFields) {
             RpcReference rpcReference = declaredField.getAnnotation(RpcReference.class);
             if (rpcReference != null) {
+                //获取注解中的参数添加到封装类中
                 RpcServiceProperties rpcServiceProperties = RpcServiceProperties.builder()
                         .group(rpcReference.group()).version(rpcReference.version()).build();
                 RpcClientProxy rpcClientProxy = new RpcClientProxy(rpcClient, rpcServiceProperties);
