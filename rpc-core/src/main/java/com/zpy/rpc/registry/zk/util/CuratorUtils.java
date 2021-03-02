@@ -67,14 +67,18 @@ public final class CuratorUtils {
      * @return All child nodes under the specified node
      */
     public static List<String> getChildrenNodes(CuratorFramework zkClient, String rpcServiceName) {
+        //获取注册信息的时候先看本地map是否注册过服务
         if (SERVICE_ADDRESS_MAP.containsKey(rpcServiceName)) {
             return SERVICE_ADDRESS_MAP.get(rpcServiceName);
         }
         List<String> result = null;
         String servicePath = ZK_REGISTER_ROOT_PATH + "/" + rpcServiceName;
         try {
+            //从zk获取
             result = zkClient.getChildren().forPath(servicePath);
+            //放入map中
             SERVICE_ADDRESS_MAP.put(rpcServiceName, result);
+            //注册监听
             registerWatcher(rpcServiceName, zkClient);
         } catch (Exception e) {
             log.error("get children nodes for path [{}] fail", servicePath);
@@ -83,7 +87,7 @@ public final class CuratorUtils {
     }
 
     /**
-     * Empty the registry of data
+     * 服务端下线 清理zk注册信息
      */
     public static void clearRegistry(CuratorFramework zkClient, InetSocketAddress inetSocketAddress) {
         REGISTERED_PATH_SET.stream().parallel().forEach(p -> {
@@ -99,14 +103,14 @@ public final class CuratorUtils {
     }
 
     public static CuratorFramework getZkClient() {
-        // check if user has set zk address
+        // 检查用户是否设置了zk地址
         Properties properties = PropertiesFileUtil.readPropertiesFile(RpcConfigEnum.RPC_CONFIG_PATH.getPropertyValue());
         String zookeeperAddress = properties != null && properties.getProperty(RpcConfigEnum.ZK_ADDRESS.getPropertyValue()) != null ? properties.getProperty(RpcConfigEnum.ZK_ADDRESS.getPropertyValue()) : DEFAULT_ZOOKEEPER_ADDRESS;
         // if zkClient has been started, return directly
         if (zkClient != null && zkClient.getState() == CuratorFrameworkState.STARTED) {
             return zkClient;
         }
-        // Retry strategy. Retry 3 times, and will increase the sleep time between retries.
+        // 重试策略。重试3次，将增加两次重试之间的睡眠时间。
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES);
         zkClient = CuratorFrameworkFactory.builder()
                 // the server to connect to (can be a server list)
@@ -118,9 +122,9 @@ public final class CuratorUtils {
     }
 
     /**
-     * Registers to listen for changes to the specified node
+     * 注册以侦听对指定节点的更改
      *
-     * @param rpcServiceName rpc service name eg:github.javaguide.HelloServicetest2version
+     * @param rpcServiceName rpc service name eg:com.zpy.rpc.HelloServicetest2version
      */
     private static void registerWatcher(String rpcServiceName, CuratorFramework zkClient) throws Exception {
         String servicePath = ZK_REGISTER_ROOT_PATH + "/" + rpcServiceName;
