@@ -1,0 +1,2 @@
+netty=gcom.zpy.rpc.remoting.transport.netty.client.NettyRpcClient
+socket=com.zpy.rpc.remoting.transport.socket.SocketRpcClient

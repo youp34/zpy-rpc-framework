@@ -86,6 +86,7 @@ public class NettyRpcServerHandler extends ChannelInboundHandlerAdapter {
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
             IdleState state = ((IdleStateEvent) evt).state();
+            // 超过30s 开始关闭连接
             if (state == IdleState.READER_IDLE) {
                 log.info("idle check happen, so close the connection");
                 ctx.close();

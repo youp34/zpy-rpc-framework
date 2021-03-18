@@ -37,7 +37,7 @@ public final class CuratorUtils {
     private static final Set<String> REGISTERED_PATH_SET = ConcurrentHashMap.newKeySet();
     private static CuratorFramework zkClient;
     //服务注册地址
-    private static final String DEFAULT_ZOOKEEPER_ADDRESS = "10.105.94.14:2181";
+    private static final String DEFAULT_ZOOKEEPER_ADDRESS = "47.99.67.211:2181";
 
     private CuratorUtils() { }
 
